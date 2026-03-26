@@ -1,13 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex flex-wrap items-center justify-between gap-3">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Create Course') }}
-            </h2>
+            <div>
+                <p class="text-xs uppercase tracking-[0.25em] text-slate-500">Create new course</p>
+            </div>
             <a
                 href="{{ route('courses.index') }}"
-                class="text-sm font-semibold text-gray-600 hover:text-gray-900"
-            >
+                class="text-sm font-semibold text-gray-600 hover:text-gray-900">
                 Back to courses
             </a>
         </div>
@@ -33,7 +32,7 @@
                         </div>
                     </div>
 
-                    <div class="grid gap-6 md:grid-cols-2">
+                    <div class="grid gap-6 md:grid-cols-3">
                         <div>
                             <x-input-label for="category_name" value="Category" />
                             <select id="category_name" name="category_name"  class="px-3 py-2 border-2 border-gray-300 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
@@ -51,6 +50,12 @@
                             <x-input-label for="credit" value="Credit" />
                             <x-text-input id="credit" name="credit" type="number" min="1" class="mt-1 block w-full" :value="old('credit')" />
                             <x-input-error class="mt-2" :messages="$errors->get('credit')" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="price" value="Price" />
+                            <x-text-input id="price" name="price" type="number" min="0" step="0.01" class="mt-1 block w-full" :value="old('price')" />
+                            <x-input-error class="mt-2" :messages="$errors->get('price')" />
                         </div>
                     </div>
 

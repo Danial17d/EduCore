@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Enums\PermissionType;
+use App\Http\Requests\StoreExperienceRequest;
+use App\Http\Requests\UpdateExperienceRequest;
 use App\Models\Experience;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -12,20 +14,11 @@ use Spatie\Permission\Models\Permission;
 class ExperienceController extends Controller
 {
 
-    public function store(Request $request){
+    public function store(StoreExperienceRequest $request){
 
         Gate::authorize(PermissionType::ExperienceCreate);
 
-        $validated = $request->validate([
-            'title' => ['required', 'string', 'max:120'],
-            'company' => ['required', 'string', 'max:120'],
-            'location' => ['nullable', 'string', 'max:120'],
-            'employment_type' => ['nullable', 'string', 'max:60'],
-            'start_date' => ['required', 'date'],
-            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
-            'is_current' => ['nullable', 'boolean'],
-            'description' => ['nullable', 'string', 'max:1000'],
-        ]);
+        $validated = $request->validated();
 
         if (!empty($validated['is_current'])) {
             $validated['end_date'] = null;
@@ -35,9 +28,24 @@ class ExperienceController extends Controller
 
         return Redirect::route('profile.edit')->with('status', 'experience-added');
     }
-    public function update(Request $request, Experience $experience){
+    public function update(UpdateExperienceRequest $request, Experience $experience){
 
-        Gate::authorize(PermissionType::ExperienceUpdate)
+        Gate::authorize(PermissionType::ExperienceUpdate);
+
+        $validated = $request->validated();
+
+        $validated['is_current'] = $request->boolean('is_current');
+        if ($validated['is_current']) {
+            $validated['end_date'] = null;
+        }
+
+        if ($experience->user_id !== $request->user()->id) {
+            abort(403);
+        }
+
+        $experience->update($validated);
+
+        return Redirect::route('profile.edit')->with('status', 'experience-updated');
     }
 
     public function destroy(Request $request, Experience $experience){

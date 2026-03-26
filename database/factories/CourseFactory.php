@@ -27,7 +27,6 @@ class CourseFactory extends Factory
             'credit' => $this->faker->numberBetween(1, 6),
             'code' => strtoupper($this->faker->unique()->bothify('CRS-###')),
             'description' => $this->faker->sentence(16),
-            'image' => $this->faker->imageUrl(800, 600, 'education', true),
             'status' => 'active',
         ];
     }

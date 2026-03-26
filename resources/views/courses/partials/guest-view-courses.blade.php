@@ -1,7 +1,7 @@
+
 <x-guest-layout>
         <div class="mx-auto w-full max-w-6xl px-4 pb-12 pt-10 sm:px-6 lg:px-8">
             <section class="relative overflow-hidden rounded-3xl px-6 py-10 text-white shadow-2xl sm:px-10 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.25),transparent_55%),radial-gradient(circle_at_80%_20%,rgba(14,165,233,0.3),transparent_50%),linear-gradient(135deg,#0b1120_0%,#0f172a_40%,#111827_100%)]">
-                <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml;utf8,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2760%27 height=%2760%27 viewBox=%270 0 60 60%27%3E%3Cpath d=%27M0 0h60v60H0z%27 fill=%27none%27/%3E%3Cpath d=%27M0 30h60M30 0v60%27 stroke=%27%23ffffff%27 stroke-opacity=%270.15%27/%3E%3C/svg%3E');"></div>
                 <div class="relative z-10 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                         <p class="text-sm uppercase tracking-[0.2em] text-sky-200">EduCore Courses</p>
@@ -18,6 +18,21 @@
                 </div>
             </section>
 
+            <section class="mt-8">
+                <form method="GET" action="{{ route('courses.index') }}" class="flex flex-col gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center">
+                    <div class="flex-1">
+                        <label for="course-search" class="sr-only">Search courses</label>
+                        <input id="course-search" name="search" type="search" value="{{ $search }}" placeholder="Search by course name, code, category, or description" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm text-slate-700 placeholder:text-slate-400 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-200">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="submit" class="rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">Search</button>
+                        @if ($search !== '')
+                            <a href="{{ route('courses.index') }}" class="text-sm font-semibold text-slate-500 transition hover:text-slate-700">Clear</a>
+                        @endif
+                    </div>
+                </form>
+            </section>
+
             <section class="mt-10 space-y-10">
                 @forelse ($coursesByCategory as $categoryName => $categoryCourses)
                     <div>
@@ -27,22 +42,9 @@
                         </div>
                         <div class="mt-5 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                             @foreach ($categoryCourses as $course)
-                                @php
-                                    $imageUrl = $course->image;
-
-                                    if (!$imageUrl) {
-                                        $imageUrl = $placeholderUrl;
-                                    }
-                                    elseif (!\Illuminate\Support\Str::startsWith($imageUrl, ['http://', 'https://', '//', 'data:'])) {
-                                        $imageUrl = \Illuminate\Support\Str::startsWith($imageUrl, 'storage/')
-                                            ? asset($imageUrl)
-                                            : Storage::url($imageUrl);
-                                    }
-
-                                @endphp
                                 <article class="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-2xl">
                                     <div class="relative aspect-[4/3] overflow-hidden">
-                                        <img src="{{ $imageUrl }}" alt="{{ $course->name }} cover" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" onerror="this.onerror=null;this.src='{{ $placeholderUrl }}';">
+                                        <img src="{{   $course->image ? asset('storage/'.$course?->image) : asset('storage/courses/Online-learning.jpg')}}" alt="{{ $course->name }} cover" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
                                         @if (!$course->image)
                                             <span class="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-700">Default cover</span>
                                         @endif
@@ -62,9 +64,10 @@
                                         <div class="mt-auto space-y-3">
                                             <div class="flex items-center justify-between text-sm font-semibold text-slate-700">
                                                 <span>{{ $course->credit }} credits</span>
+                                                <span>{{ number_format((float) $course->price, 2) }} SAR</span>
                                             </div>
                                             <div>
-                                                <x-hyper-link href="{{route('courses.store')}}">Enroll</x-hyper-link>
+                                                <x-hyper-link href="{{ route('login') }}">Enroll</x-hyper-link>
                                             </div>
                                         </div>
                                     </div>

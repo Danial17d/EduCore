@@ -14,8 +14,6 @@ class Certificate extends Model
         'issuer',
         'issue_date',
         'expiry_date',
-        'credential_id',
-        'credential_url',
         'description',
     ];
 

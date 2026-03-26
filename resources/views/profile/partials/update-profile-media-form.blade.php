@@ -16,7 +16,6 @@
         <x-img-feed-back />
         <div class="relative">
 
-            {{-- Banner --}}
             <label for="banner" class="block cursor-pointer">
                 <img
                     src="{{ $bannerUrl ?? '' }}"
@@ -35,7 +34,6 @@
 
             <input id="banner" name="banner" type="file" accept="image/*" class="sr-only"/>
 
-            {{-- Avatar --}}
             <div class="absolute left-8 bottom-0 translate-y-1/2">
                 <label for="avatar" class="block cursor-pointer">
                     <div
@@ -61,16 +59,20 @@
     <div class="mt-10">
 
         @if(auth()->id() === $user->id )
-            @if($profile?->bio)
-                <x-input-label value="bio"></x-input-label>
-                <textarea  name="bio" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{$profile->bio}}</textarea>
-            @endif
+            <x-input-label for="bio" value="Bio" />
+            <textarea
+                id="bio"
+                name="bio"
+                rows="4"
+                class="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+            >{{ old('bio', $profile?->bio) }}</textarea>
+            <x-input-error class="mt-2" :messages="$errors->get('bio')" />
 
-        <div class="mt-5">
+            <div class="mt-5">
 
                 <x-primary-button>Save</x-primary-button>
 
-        </div>
+            </div>
 
         @endif
 

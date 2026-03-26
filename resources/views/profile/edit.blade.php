@@ -1,8 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Profile') }}
-        </h2>
+        <div>
+            <p class="text-xs uppercase tracking-[0.25em] text-slate-500">Profile</p>
+        </div>
     </x-slot>
     <x-auth-session-status class="mb-4" :status="session('status')" ></x-auth-session-status>
 
@@ -21,7 +21,6 @@
                     @include('profile.partials.update-profile-information-form')
                 </div>
             </div>
-
 
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                 <div class="max-w-xl">

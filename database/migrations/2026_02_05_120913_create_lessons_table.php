@@ -19,6 +19,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->unsignedInteger('duration');
             $table->string('video')->nullable();
+            $table->text('resources')->nullable();
+            $table->text('objectives')->nullable();
             $table->timestamps();
         });
     }

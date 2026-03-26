@@ -72,5 +72,16 @@ enum PermissionType: string
     case ExperienceDelete = 'experience:delete';
     case ExperienceUpdate = 'experience:update';
 
+    /*
+   |--------------------------------------------------------------------------
+   | Experience Management
+   |--------------------------------------------------------------------------
+   */
+    case LessonList = 'lesson:list';
+    case LessonCreate = 'lesson:create';
+    case LessonUpdate = 'lesson:update';
+    case LessonDelete = 'lesson:delete';
+    case LessonView = 'lesson:view';
+
 
 }

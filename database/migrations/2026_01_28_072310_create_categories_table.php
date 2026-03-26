@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description');
-            $table->enum('type',['program','course','community'])->default('course');
+            $table->string('type')->default('course');
             $table->timestamps();
         });
     }

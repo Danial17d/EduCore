@@ -2,14 +2,18 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Observers\UserObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
-
-class User extends Authenticatable
+#[ObservedBy([UserObserver::class])]
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable,HasRoles;
@@ -47,13 +51,21 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function courseInstructor(){
+    public function courseInstructor() :HasMany
+    {
         return $this->hasMany(CourseInstructor::class);
     }
-    public function userProfile(){
+
+    public function instructedCourses(): BelongsToMany
+    {
+        return $this->belongsToMany(Course::class, 'course_instructors');
+    }
+    public function userProfile(): HasOne
+    {
         return $this->hasOne(Profile::class);
     }
-    public function enrollment(){
+    public function enrollment():HasMany
+    {
         return $this->hasMany(Enrollment::class);
     }
     public function experiences(): HasMany
@@ -64,5 +76,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Certificate::class);
     }
-
+    public function lessonProgress(): HasMany
+    {
+        return $this->hasMany(LessonProgress::class);
+    }
 }

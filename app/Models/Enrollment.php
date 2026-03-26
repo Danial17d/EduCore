@@ -9,13 +9,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[ObservedBy([EnrollmentObserver::class])]
 class Enrollment extends Model
 {
+    protected $fillable = [
+        'course_id',
+        'user_id',
+    ];
     protected $casts = [
         'completed_at' => 'datetime',
     ];
 
     public function student(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function user(): BelongsTo
@@ -25,7 +29,7 @@ class Enrollment extends Model
 
     public function courses(): BelongsTo
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsTo(Course::class, 'course_id');
     }
 
     public function course(): BelongsTo

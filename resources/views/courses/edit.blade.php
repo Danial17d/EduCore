@@ -1,9 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex flex-wrap items-center justify-between gap-3">
-            <h2 class="text-xl font-semibold text-gray-800 leading-tight">
-                {{ __('Edit Course') }}
-            </h2>
+            <div>
+                <p class="text-xs uppercase tracking-[0.25em] text-slate-500">Edit course</p>
+            </div>
             <a
                 href="{{ route('courses.show', $course->slug) }}"
                 class="text-sm font-semibold text-gray-600 hover:text-gray-900"
@@ -13,17 +13,6 @@
         </div>
     </x-slot>
 
-    @php
-        $imageUrl = $course->image;
-        if (!$imageUrl) {
-            $imageUrl = $placeholderUrl;
-        }
-        elseif (!\Illuminate\Support\Str::startsWith($imageUrl, ['http://', 'https://', '//', 'data:'])) {
-            $imageUrl = \Illuminate\Support\Str::startsWith($imageUrl, 'storage/')
-                ? asset($imageUrl)
-                : Storage::url($imageUrl);
-        }
-    @endphp
 
     <div class="py-10">
         <div class="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
@@ -92,7 +81,7 @@
 
                         <div>
                             <x-input-label for="description" value="Description" />
-                            <textarea id="description" name="description" rows="4" class="border-2 border-gray-300 mt-1 block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">{{ old('description', $course->description) }}</textarea>
+                            <textarea id="description" name="description" rows="4" class="p-3 border-2 border-gray-300 mt-1 block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">{{ old('description', $course->description) }}</textarea>
                             <x-input-error class="mt-2" :messages="$errors->get('description')" />
                         </div>
 
@@ -119,10 +108,9 @@
 
                     <div class="mt-4 overflow-hidden rounded-xl border border-slate-200">
                         <img
-                            src="{{ $imageUrl }}"
+                            src="{{  $course->image ? asset('storage/'.$course?->image) : asset('storage/courses/Online-learning.jpg') }}"
                             alt="{{ $course->name }} cover"
                             class="h-40 w-full object-cover"
-                            onerror="this.onerror=null;this.src='{{ $placeholderUrl }}';"
                         />
                     </div>
 

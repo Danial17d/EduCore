@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\PermissionType;
+use App\Observers\UserObserver;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 
 class MediaController extends Controller
 {
-    public function update(Request $request)
+    public function update(Request $request,UserObserver $observer)
     {
         Gate::authorize(PermissionType::ProfileUpdate);
 
@@ -23,9 +24,8 @@ class MediaController extends Controller
 
         $user = $request->user();
 
-        $profile = $user->userProfile()->firstOrCreate([],[
-            'bio' => $validated['bio'] ?? '',
-        ]);
+        $profile = $user->userProfile;
+
         $avatarUrl = null;
         $bannerUrl = null;
 

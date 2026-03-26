@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('attachments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('lesson_id')->constrained();
-            $table->enum('type', ['file', 'image'])->default('file');
+            $table->string('type');
             $table->string('name');
             $table->string('path');
             $table->timestamps();

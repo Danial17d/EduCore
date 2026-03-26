@@ -8,7 +8,6 @@
                 </div>
                 <nav class="flex gap-4 text-sm text-slate-600">
                     <a href="{{route('courses.index')}}" class="hover:text-blue-500">Course</a>
-                    <a href="{{route('communities.index')}}" class="hover:text-blue-500">Community</a>
                 </nav>
             </header>
 

@@ -26,6 +26,11 @@ class PermissionSeeder extends Seeder
             'admin' => PermissionType::cases(),
 
             'instructor' => [
+                PermissionType::LessonCreate,
+                PermissionType::LessonUpdate,
+                PermissionType::LessonDelete,
+                PermissionType::LessonView,
+                PermissionType::DashboardView,
                 PermissionType::CourseList,
                 PermissionType::CourseView,
                 PermissionType::CourseUpdate,
@@ -42,6 +47,7 @@ class PermissionSeeder extends Seeder
 
 
             'student' => [
+                PermissionType::DashboardView,
                 PermissionType::CourseList,
                 PermissionType::CourseView,
                 PermissionType::EnrollmentList,
