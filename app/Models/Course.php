@@ -19,7 +19,6 @@ class Course extends Model
         'slug',
         'credit',
         'code',
-        'price',
         'description',
         'image',
         'is_acvtive',

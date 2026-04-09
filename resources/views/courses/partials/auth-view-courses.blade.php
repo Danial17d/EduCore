@@ -71,10 +71,6 @@
                                         </div>
                                         <div class="mt-auto space-y-3">
                                             <div class="flex items-center justify-between text-sm font-semibold text-slate-700">
-                                                <span>{{ $course->credit }} credits</span>
-                                                <span>{{ number_format((float) $course->price, 2) }} SAR</span>
-                                            </div>
-                                            <div class="flex items-center justify-between text-sm font-semibold text-slate-700">
                                                 <span class="text-slate-500">Updated {{ $course->updated_at->diffForHumans() }}</span>
                                             </div>
                                             <div class="space-x-2">
