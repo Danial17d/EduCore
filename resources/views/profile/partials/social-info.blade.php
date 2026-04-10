@@ -50,11 +50,10 @@
                             >
                                 Update
                             </button>
-                            <form method="post" action="{{ route('experience.destroy', $experience) }}">
-                                @csrf
-                                @method('DELETE')
-                                <button class="text-xs font-semibold text-red-600 hover:text-red-700">Delete</button>
-                            </form>
+                            <x-delete-modal
+                                :action="route('experience.destroy', $experience)"
+                                :message="'Delete \'' . $experience->title . '\' at ' . $experience->company . '?'"
+                                label="Delete" />
                         </div>
                     </div>
                     @if($experience->description)

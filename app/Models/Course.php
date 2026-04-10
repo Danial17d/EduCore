@@ -17,11 +17,12 @@ class Course extends Model
         'category_id',
         'name',
         'slug',
-        'credit',
         'code',
         'description',
+        'price',
+        'credit',
         'image',
-        'is_acvtive',
+        'status',
     ];
 
     public function category()

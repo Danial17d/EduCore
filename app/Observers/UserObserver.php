@@ -27,6 +27,19 @@ class UserObserver
     }
 
     /**
+     * Handle the User "deleting" event.
+     */
+    public function deleting(User $user): void
+    {
+        $user->userProfile()->delete();
+        $user->experiences()->delete();
+        $user->certificates()->delete();
+        $user->lessonProgress()->delete();
+        $user->enrollment()->delete();
+        $user->courseInstructor()->delete();
+    }
+
+    /**
      * Handle the User "deleted" event.
      */
     public function deleted(User $user): void

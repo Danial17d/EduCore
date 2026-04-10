@@ -54,13 +54,26 @@ class EnrollmentController extends Controller
 
         $course = Course::where('slug', $request->course_slug)->firstOrFail();
 
-        $enrollment = Enrollment::query()
+        $alreadyEnrolled = Enrollment::query()
             ->where('user_id', auth()->id())
             ->where('course_id', $course->id)
             ->exists();
 
-        if ($enrollment) {
-            return redirect()->route('enrollments.index')->with('status','course-already-enrolled');
+        if ($alreadyEnrolled) {
+            return redirect()->route('enrollments.index')->with('status', 'course-already-enrolled');
+        }
+
+        // Block enrollment if active credits would exceed 18
+        if ($course->credit) {
+            $activeCredits = Enrollment::query()
+                ->where('user_id', auth()->id())
+                ->whereNull('completed_at')
+                ->join('courses', 'enrollments.course_id', '=', 'courses.id')
+                ->sum('courses.credit');
+
+            if (($activeCredits + $course->credit) > 18) {
+                return redirect()->back()->with('status', 'credit-limit-exceeded');
+            }
         }
 
         Enrollment::create([
@@ -68,7 +81,7 @@ class EnrollmentController extends Controller
             'user_id' => $request->user()->id,
         ]);
 
-        return redirect()->route('enrollments.index')->with('status','course-enrolled-successfully');
+        return redirect()->route('enrollments.index')->with('status', 'course-enrolled-successfully');
 
 
 

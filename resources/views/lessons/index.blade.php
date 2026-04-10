@@ -1,7 +1,4 @@
 <x-app-layout>
-
-</x-app-layout>
-<x-app-layout>
     <x-slot name="header">
         <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
@@ -16,18 +13,54 @@
 
     <div class="py-10">
         <div class="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 space-y-8">
-            <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                <div class="flex flex-wrap items-center justify-between gap-3">
-                    <div>
-                        <p class="text-xs uppercase tracking-[0.2em] text-slate-500">Current Course</p>
-                        <h3 class="text-lg font-semibold text-slate-900">{{ $course->name }}</h3>
-                        <p class="text-sm text-slate-500">{{ $course->code }} - {{ $course->lessons->count() }} lessons</p>
-                    </div>
-                    <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600">
-                        {{ $course->category?->name ?? 'General' }}
-                    </span>
+            @if($lessons)
+                @foreach($lessons as $lesson)
+                    <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                        <div class="flex flex-wrap items-center justify-between gap-3">
+                            <div>
+                                <p class="text-xs uppercase tracking-[0.2em] text-slate-500">Current Course</p>
+                                <h3 class="text-lg font-semibold text-slate-900">{{ $course->name }}</h3>
+                                <p class="text-sm text-slate-500">{{ $lesson->slug }}</p>
+                            </div>
+                            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600">
+                            Lesson
+                        </span>
+                        </div>
+                        @if($lesson->attachments->count())
+                            <details class="mt-4 group">
+                                <summary class="flex cursor-pointer items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900 list-none">
+                                    <svg class="h-4 w-4 transition-transform group-open:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                    </svg>
+                                    Attachments ({{ $lesson->attachments->count() }})
+                                </summary>
+
+                                <ul class="mt-3 space-y-2 pl-6">
+                                    @foreach($lesson->attachments as $attachment)
+                                        <li>
+                                            <a href="{{ asset('storage/'.$attachment->path) }}"
+                                               target="_blank"
+                                               class="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 hover:underline">
+                                                <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                          d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/>
+                                                </svg>
+                                                {{ $attachment->name ?? basename($attachment->path) }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </details>
+                        @endif
+
+                    </section>
+                @endforeach
+            @else
+                <div class="text-center p-4 border-gray border-b-1 ">
+                    <h1 class="text-gray-500 text-xl">There is no lesson for this course</h1>
                 </div>
-            </section>
+            @endif
+
 
             <section class="space-y-5">
                 <div class="flex items-center justify-between">
@@ -49,7 +82,6 @@
                                 <p class="mt-2 text-sm text-slate-600">{{ \Illuminate\Support\Str::limit($relatedCourse->description, 100) }}</p>
                                 <div class="mt-4 flex items-center justify-between text-sm text-slate-500">
                                     <span>{{ $relatedCourse->lessons_count }} lessons</span>
-                                    <span>{{ number_format((float) $relatedCourse->price, 2) }} SAR</span>
                                 </div>
                                 <div class="mt-4">
                                     <x-hyper-link href="{{ route('courses.show', $relatedCourse->slug) }}">View Course</x-hyper-link>

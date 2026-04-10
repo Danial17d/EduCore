@@ -89,34 +89,47 @@ class CourseController extends Controller
         ]);
     }
     public function store(Request $request){
-        Gate::authorize(PermissionType::CourseCreate);
-        $validated = $request->validate([
-            'category_name' => ['required', 'string','max:255'],
-            'name' => ['required', 'string'],
-            'code' => ['required', 'string','unique:courses'],
-            'credit' => ['required', 'integer' ,'min:1'],
-            'price' => ['required', 'numeric', 'min:0'],
-            'is_acvtive' => ['required', 'string','max:255'],
-            'image' => ['required', 'file', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
-            'description' => ['required', 'string','max:255'],
-            'slug' => ['nullable', 'string','unique:courses'],
-        ]);
-        $slug = $validated['slug'] ? $validated['slug'] : Str::slug($validated['name']);
 
-        $path = $request->file('image')->store('courses', 'public');
+        Gate::authorize(PermissionType::CourseCreate);
+
+        $validated = $request->validate([
+            'category_name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string'],
+            'code' => ['required', 'string', 'unique:courses'],
+            'status' => ['required', 'string', 'max:255'],
+            'price' => ['nullable', 'numeric', 'min:0'],
+            'credit'=> ['required', 'integer', 'min:1'],
+            'image' => ['nullable', 'file', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            'description'   => ['nullable', 'string', 'max:255'],
+        ]);
+
+        // Auto-generate unique slug from course name
+        $baseSlug = Str::slug($validated['name']);
+        $slug = $baseSlug;
+        $i = 1;
+        while (Course::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $i++;
+        }
+
+        if(request()->hasFile('image')){
+            $imagePath = $request->file('image')->store('courses', 'public');
+        }
+        else{
+            $imagePath = "courses/default.jpg";
+        }
 
         $categoryId = Category::where('name', $validated['category_name'])->value('id');
 
         Course::create([
             'category_id' => $categoryId,
-            'name' => $validated['name'],
-            'code' => $validated['code'],
-            'credit' => $validated['credit'],
-            'price' => $validated['price'],
+            'name'  => $validated['name'],
+            'code'  => $validated['code'],
             'description' => $validated['description'],
             'slug' => $slug,
-            'is_acvtive' => $validated['is_acvtive'],
-            'image' => $path,
+            'status' => $validated['status'],
+            'price' => $validated['price'],
+            'credit' => $validated['credit'],
+            'image' => $imagePath,
         ]);
         return Redirect::route('courses.index')->with('status', 'course-created');
     }
@@ -135,17 +148,19 @@ class CourseController extends Controller
     }
     public function update(Request $request, String $slug)
     {
+        Gate::authorize(PermissionType::CourseUpdate);
+
         $course = Course::where('slug',$slug)->firstOrFail();
 
         $validated = $request->validate([
             'category_name' => ['required', 'string','max:255','min:2'],
             'name' => ['required', 'string','min:2'],
             'code' => ['required', 'string','min:2'],
-            'credit' => ['required', 'integer' ,'min:1'],
-            'price' => ['required', 'numeric', 'min:0'],
-            'is_acvtive' => ['required', 'string', 'in:active,inactive'],
+            'status' => ['required', 'string', 'in:active,inactive'],
+            'price' => ['nullable', 'numeric', 'min:0'],
+            'credit' => ['nullable', 'integer', 'min:1'],
             'image' => ['nullable', 'file', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
-            'description' => ['required', 'string','max:255'],
+            'description' => ['nullable', 'string','max:255'],
             'slug' => ['nullable', 'string'],
         ]);
         $categoryId = Category::where('name', $validated['category_name'])->first()->id;
@@ -161,11 +176,11 @@ class CourseController extends Controller
             'category_id' =>$categoryId,
             'name' => $validated['name'],
             'code' => $validated['code'],
-            'credit' => $validated['credit'],
-            'price' => $validated['price'],
             'description' => $validated['description'],
             'slug' => $slug,
-            'is_acvtive' => $validated['is_acvtive'],
+            'status' => $validated['status'],
+            'price' => $validated['price'],
+            'credit' => $validated['credit'],
             'image' => $path,
         ]);
         return Redirect::route('courses.index')->with('status', 'course-updated');

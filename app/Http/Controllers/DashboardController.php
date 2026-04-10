@@ -103,13 +103,17 @@ class DashboardController extends Controller
                 ->whereNotNull('completed_at')
                 ->count();
 
-            $availableLessons = Lesson::query()
-                ->whereIn('course_id', $enrolledCourseIds)
-                ->count();
+            $creditsEarned = Enrollment::query()
+                ->where('user_id', $user->id)
+                ->whereNotNull('completed_at')
+                ->join('courses', 'enrollments.course_id', '=', 'courses.id')
+                ->sum('courses.credit');
 
-            $progressPercent = $availableLessons > 0
-                ? (int) round(($completedLessons / $availableLessons) * 100)
-                : 0;
+            $creditsInProgress = Enrollment::query()
+                ->where('user_id', $user->id)
+                ->whereNull('completed_at')
+                ->join('courses', 'enrollments.course_id', '=', 'courses.id')
+                ->sum('courses.credit');
 
             $cards = [
                 ['label' => 'Enrolled Courses', 'value' => $enrolledCourseIds->count()],
@@ -120,8 +124,8 @@ class DashboardController extends Controller
                         ->whereNotNull('completed_at')
                         ->count(),
                 ],
-                ['label' => 'Completed Lessons', 'value' => $completedLessons],
-                ['label' => 'Progress', 'value' => $progressPercent . '%'],
+                ['label' => 'Credits Earned', 'value' => (int) $creditsEarned],
+                ['label' => 'Credits In Progress', 'value' => (int) $creditsInProgress],
             ];
 
             $quickActions = [
@@ -131,7 +135,7 @@ class DashboardController extends Controller
             ];
 
             $recentEnrollments = Enrollment::query()
-                ->with('course:id,name')
+                ->with('course:id,name,credit')
                 ->where('user_id', $user->id)
                 ->latest()
                 ->take(4)
@@ -145,6 +149,8 @@ class DashboardController extends Controller
             'recentCourses' => $recentCourses,
             'coursesTeachOverview' => $coursesTeachOverview,
             'roles' => $roles,
+            'creditsEarned' => $creditsEarned ?? 0,
+            'creditsInProgress' => $creditsInProgress ?? 0,
         ]);
     }
 }

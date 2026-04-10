@@ -52,11 +52,10 @@
                                 {{ $course?->status ?? 'N/A' }}
                             </span>
                             @if(\Illuminate\Support\Facades\Auth::user()->hasRole('admin'))
-                                <form action="{{route('instructors-assignment.destroy',$assignment)}}" method="post">
-                                    @csrf
-                                    @method('DELETE')
-                                    <x-danger-button>Unassign</x-danger-button>
-                                </form>
+                                <x-delete-modal
+                                    :action="route('instructors-assignment.destroy', $assignment)"
+                                    :message="'Unassign ' . ($assignment->instructor?->name ?? 'this instructor') . ' from ' . ($course?->name ?? 'this course') . '?'"
+                                    label="Unassign" />
                             @endif
 
                             @if($course?->slug)

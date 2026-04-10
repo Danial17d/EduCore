@@ -13,6 +13,10 @@
 
 pest()->extend(Tests\TestCase::class)
     ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+    ->beforeEach(fn() => $this->seed([
+        \Database\Seeders\RoleSeeder::class,
+        \Database\Seeders\PermissionSeeder::class,
+    ]))
     ->in('Feature');
 
 /*

@@ -21,7 +21,6 @@
                                 {{ $course->status }}
                             </span>
                             <span class="text-sm text-slate-500 ml-2">{{ $course->credit }} credits</span>
-                            <span class="text-sm text-slate-500 ml-2">{{ number_format((float) $course->price, 2) }} SAR</span>
                             @if($course->category)
                                 <span class="text-sm text-slate-500">Category: {{ $course->category->name }}</span>
                             @endif
@@ -63,11 +62,10 @@
                                                     <p class="text-xs text-slate-500">{{ $assignment->instructor?->email }}</p>
                                                 </div>
                                                 @can(\App\Enums\PermissionType::CourseInstructorDelete->value)
-                                                    <form method="POST" action="{{ route('instructors-assignment.destroy', $assignment) }}">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <x-danger-button type="submit" class="px-3 py-2 text-xs">Unassign</x-danger-button>
-                                                    </form>
+                                                    <x-delete-modal
+                                                        :action="route('instructors-assignment.destroy', $assignment)"
+                                                        :message="'Unassign ' . ($assignment->instructor?->name ?? 'this instructor') . ' from this course?'"
+                                                        label="Unassign" />
                                                 @endcan
                                             </li>
                                         @endforeach
@@ -111,13 +109,9 @@
                                                         View
                                                     </x-hyper-link>
                                                     @can(\App\Enums\PermissionType::LessonDelete->value)
-                                                        <form method="POST" action="{{ route('lessons.destroy', $lesson->slug) }}" onsubmit="return confirm('Delete this lesson? This action cannot be undone.');">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="rounded-md bg-rose-600 px-2 py-1 text-[11px] font-semibold text-white transition hover:bg-rose-700">
-                                                                Delete
-                                                            </button>
-                                                        </form>
+                                                        <x-delete-modal
+                                                            :action="route('lessons.destroy', $lesson->slug)"
+                                                            :message="'Delete lesson \'' . $lesson->title . '\'? This cannot be undone.'" />
                                                     @endcan
                                                 </span>
                                             </summary>
@@ -164,13 +158,9 @@
                            @endcan
                             @if(auth()->user()->hasRole('admin'))
                                    <x-hyper-link href="{{route('courses.edit',$course->slug)}}">Edit</x-hyper-link>
-                                <form method="post" action="{{ route('courses.destroy', $course->slug) }}" onsubmit="return confirm('Delete this course? This action cannot be undone.');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <x-danger-button type="submit" class="px-4 py-3" >
-                                        Delete
-                                    </x-danger-button>
-                                </form>
+                                <x-delete-modal
+                                    :action="route('courses.destroy', $course->slug)"
+                                    :message="'Delete course \'' . $course->name . '\'? This cannot be undone.'" />
                             @endif
 
                         </div>

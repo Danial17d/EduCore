@@ -20,14 +20,6 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
         ]);
 
-        $categories = Category::factory()
-            ->count(4)
-            ->create(['type' => 'course']);
-
-        Course::factory()
-            ->count(12)
-            ->state(fn () => ['category_id' => $categories->random()->id])
-            ->create();
 
         User::factory()->create([
             'name' => 'Test User',

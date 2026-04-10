@@ -37,11 +37,10 @@
                         <a href="{{ route('users.edit', $user) }}" class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
                             Edit user
                         </a>
-                        <form action="{{ route('users.destroy', $user) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <x-danger-button type="submit">Delete user</x-danger-button>
-                        </form>
+                        <x-delete-modal
+                            :action="route('users.destroy', $user)"
+                            :message="'Delete user \'' . $user->name . '\'? This cannot be undone.'"
+                            label="Delete user" />
                     </div>
                 </div>
             </div>

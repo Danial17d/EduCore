@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseInstructorController;
 use App\Http\Controllers\DashboardController;
@@ -40,6 +41,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/experience', [ExperienceController::class, 'store'])->name('experience.store');
     Route::patch('/experience/{experience}', [ExperienceController::class, 'update'])->name('experience.update');
     Route::delete('/experience/{experience}', [ExperienceController::class, 'destroy'])->name('experience.destroy');
+
+    Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+    Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
+    Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
+    Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+    Route::patch('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
+    Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
     Route::get('/courses/create', [CourseController::class, 'create'])->name('courses.create');
     Route::get('/courses/{slug}', [CourseController::class, 'show'])->name('courses.show');

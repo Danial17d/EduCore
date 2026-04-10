@@ -97,8 +97,8 @@ class LessonController extends Controller
             'description' => $validated['description'],
             'duration' => $validated['duration'],
             'video' => $videoPath,
-            'objectives' => $validated['objectives'],
-            'resources' => $validated['resources'],
+            'objectives' => $validated['objectives'] ?? null,
+            'resources' => $validated['resources'] ?? null,
 
         ]);
 
@@ -154,8 +154,8 @@ class LessonController extends Controller
             'slug' => Str::slug($validated['title']),
             'description' => $validated['description'],
             'duration' => $validated['duration'],
-            'objectives' => $validated['objectives'],
-            'resources' => $validated['resources'],
+            'objectives' => $validated['objectives'] ?? null,
+            'resources' => $validated['resources'] ?? null,
             'video' => $lesson->video,
         ]);
 

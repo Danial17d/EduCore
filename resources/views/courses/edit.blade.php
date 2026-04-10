@@ -53,10 +53,19 @@
                                 @endif
                                 <x-input-error class="mt-2" :messages="$errors->get('category_id')" />
                             </div>
+                        </div>
+
+                        <div class="grid gap-6 md:grid-cols-2">
+                            <div>
+                                <x-input-label for="price" value="Price (SAR)" />
+                                <x-text-input id="price" name="price" type="number" step="0.01" min="0" class="mt-1 block w-full" :value="old('price', $course->price)" placeholder="Leave blank for free" />
+                                <x-input-error class="mt-2" :messages="$errors->get('price')" />
+                                <p class="mt-1 text-xs text-gray-500">Leave blank if the course is free.</p>
+                            </div>
 
                             <div>
-                                <x-input-label for="credit" value="Credit" />
-                                <x-text-input id="credit" name="credit" type="number" min="1" class="mt-1 block w-full" :value="old('credit', $course->credit)" />
+                                <x-input-label for="credit" value="Credits" />
+                                <x-text-input id="credit" name="credit" type="number" min="1" class="mt-1 block w-full" :value="old('credit', $course->credit)" placeholder="e.g. 3" />
                                 <x-input-error class="mt-2" :messages="$errors->get('credit')" />
                             </div>
                         </div>
@@ -104,7 +113,6 @@
                 <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow">
                     <p class="text-xs uppercase tracking-[0.2em] text-slate-500">Preview</p>
                     <h3 class="mt-2 text-lg font-semibold text-slate-900">{{ $course->name }}</h3>
-                    <p class="text-sm text-slate-500">{{ $course->code }} - {{ $course->credit }} credits</p>
 
                     <div class="mt-4 overflow-hidden rounded-xl border border-slate-200">
                         <img

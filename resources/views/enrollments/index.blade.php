@@ -42,6 +42,11 @@
                         <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
                             {{ $progress === 100 ? 'Completed' : 'In progress' }}
                         </span>
+                        @if($course?->credit)
+                            <span class="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-600">
+                                {{ $course->credit }} credits
+                            </span>
+                        @endif
                         @if ($course?->slug)
                             <x-hyper-link href="{{ route('courses.show', $course->slug) }}">View</x-hyper-link>
                         @endif

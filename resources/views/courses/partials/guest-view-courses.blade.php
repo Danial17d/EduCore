@@ -64,7 +64,7 @@
                                         <div class="mt-auto space-y-3">
                                             <div class="flex items-center justify-between text-sm font-semibold text-slate-700">
                                                 <span>{{ $course->credit }} credits</span>
-                                                <span>{{ number_format((float) $course->price, 2) }} SAR</span>
+                                                <span>{{ $course->price !== null ? number_format((float) $course->price, 2).' SAR' : 'Free' }}</span>
                                             </div>
                                             <div>
                                                 <x-hyper-link href="{{ route('login') }}">Enroll</x-hyper-link>

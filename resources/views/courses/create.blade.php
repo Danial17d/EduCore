@@ -35,7 +35,7 @@
                     <div class="grid gap-6 md:grid-cols-3">
                         <div>
                             <x-input-label for="category_name" value="Category" />
-                            <select id="category_name" name="category_name"  class="px-3 py-2 border-2 border-gray-300 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            <select id="category_name" name="category_name" class="px-3 py-2 border-2 border-gray-300 mt-1 block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                 <option value="" disabled {{ old('category_name') ? '' : 'selected' }}>Select a category</option>
                                 @foreach($categories as $category)
                                     <option value="{{ $category }}" {{ (string) old('category_name') === (string) $category ? 'selected' : '' }}>
@@ -43,19 +43,24 @@
                                     </option>
                                 @endforeach
                             </select>
-                            <x-input-error class="mt-2" :messages="$errors->get('category_id')" />
+                            <x-input-error class="mt-2" :messages="$errors->get('category_name')" />
+                            <p class="mt-1 text-xs text-gray-500">
+                                Need a new one?
+                                <a href="{{ route('categories.create') }}" class="font-semibold text-indigo-600 hover:underline">Create a category</a>
+                            </p>
                         </div>
 
                         <div>
-                            <x-input-label for="credit" value="Credit" />
-                            <x-text-input id="credit" name="credit" type="number" min="1" class="mt-1 block w-full" :value="old('credit')" />
-                            <x-input-error class="mt-2" :messages="$errors->get('credit')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="price" value="Price" />
-                            <x-text-input id="price" name="price" type="number" min="0" step="0.01" class="mt-1 block w-full" :value="old('price')" />
+                            <x-input-label for="price" value="Price (SAR)" />
+                            <x-text-input id="price" name="price" type="number" step="0.01" min="0" class="mt-1 block w-full" :value="old('price')" placeholder="Leave blank for free" />
                             <x-input-error class="mt-2" :messages="$errors->get('price')" />
+                            <p class="mt-1 text-xs text-gray-500">Leave blank if the course is free.</p>
+                        </div>
+
+                        <div>
+                            <x-input-label for="credit" value="Credits" />
+                            <x-text-input id="credit" name="credit" type="number" min="1" class="mt-1 block w-full" :value="old('credit')" placeholder="e.g. 3" />
+                            <x-input-error class="mt-2" :messages="$errors->get('credit')" />
                         </div>
                     </div>
 
@@ -80,13 +85,6 @@
                         <x-input-label for="description" value="Description" />
                         <textarea id="description" name="description" rows="4" class="border-2 border-gray-300 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">{{ old('description') }}</textarea>
                         <x-input-error class="mt-2" :messages="$errors->get('description')" />
-                    </div>
-
-                    <div>
-                        <x-input-label for="slug" value="Slug (optional)" />
-                        <x-text-input id="slug" name="slug" type="text" class="mt-1 block w-full" :value="old('slug')" />
-                        <x-input-error class="mt-2" :messages="$errors->get('slug')" />
-                        <p class="mt-1 text-xs text-gray-500">Leave blank to generate from the course name.</p>
                     </div>
 
                     <div class="flex items-center gap-3">

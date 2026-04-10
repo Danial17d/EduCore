@@ -40,6 +40,7 @@
                         <div>
                             <x-input-label for="title" value="Lesson title"/>
                             <x-text-input id="title" name="title" type="text" class="mt-1 block w-full"
+                                          value="{{ old('title') }}"
                                           placeholder="Intro to data modeling"/>
                             <x-input-error class="mt-2" :messages="$errors->get('title')"/>
                         </div>
@@ -49,6 +50,7 @@
                         <div>
                             <x-input-label for="duration" value="Duration (minutes)"/>
                             <x-text-input id="duration" name="duration" type="number" class="mt-1 block w-full"
+                                          value="{{ old('duration') }}"
                                           placeholder="45"/>
                             <x-input-error class="mt-2" :messages="$errors->get('duration')"/>
                         </div>
@@ -56,19 +58,19 @@
 
                         <div>
                             <x-input-label for="description" value="Lesson summary" />
-                            <textarea id="description" name="description" rows="4" class="border-2 border-gray-300 mt-1 block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Describe what students will learn and practice."></textarea>
+                            <textarea id="description" name="description" rows="4" class="border-2 border-gray-300 mt-1 block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Describe what students will learn and practice.">{{ old('description') }}</textarea>
                             <x-input-error class="mt-2" :messages="$errors->get('description')" />
                         </div>
 
                         <div class="grid gap-6 md:grid-cols-2">
                             <div>
                                 <x-input-label for="objectives" value="Learning objectives" />
-                                <textarea id="objectives" name="objectives" rows="5" class="border-2 border-gray-300 mt-1 block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="- Understand key terms&#10;- Apply concepts in a short exercise"></textarea>
+                                <textarea id="objectives" name="objectives" rows="5" class="border-2 border-gray-300 mt-1 block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="- Understand key terms&#10;- Apply concepts in a short exercise">{{ old('objectives', old('learning_obj')) }}</textarea>
                                 <x-input-error class="mt-2" :messages="$errors->get('objectives')" />
                             </div>
                             <div>
                                 <x-input-label for="resources" value="Resources & links" />
-                                <textarea id="resources" name="resources" rows="5" class="border-2 border-gray-300 mt-1 block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Add URLs, readings, or media references."></textarea>
+                                <textarea id="resources" name="resources" rows="5" class="border-2 border-gray-300 mt-1 block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Add URLs, readings, or media references.">{{ old('resources', old('links')) }}</textarea>
                                 <x-input-error class="mt-2" :messages="$errors->get('resources')" />
                             </div>
                         </div>

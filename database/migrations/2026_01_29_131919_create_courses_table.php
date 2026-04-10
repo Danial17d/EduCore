@@ -16,8 +16,9 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained();
             $table->string('name');
             $table->string('slug')->unique();
-            $table->integer('credit');
             $table->string('code')->unique();
+            $table->decimal('price', 8, 2)->default(0);
+            $table->integer('credit')->default(1);
             $table->string('description');
             $table->string('image')->nullable();
             $table->string('status')->default("active");

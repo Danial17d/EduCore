@@ -14,13 +14,9 @@
                 @endif
                 <x-hyper-link href="{{ route('lessons.edit', $lesson->slug) }}">Edit</x-hyper-link>
                 @if(auth()->user()->hasRole('admin'))
-                    <form method="post" action="{{ route('lessons.destroy', $lesson->slug) }}" onsubmit="return confirm('Delete this lesson? This action cannot be undone.');">
-                        @csrf
-                        @method('DELETE')
-                        <x-danger-button type="submit" class="px-4 py-3" >
-                            Delete
-                        </x-danger-button>
-                    </form>
+                    <x-delete-modal
+                        :action="route('lessons.destroy', $lesson->slug)"
+                        :message="'Delete lesson \'' . $lesson->title . '\'? This cannot be undone.'" />
                 @endif
                 @if($nextLesson)
                     <x-hyper-link href="{{ route('lessons.show', $nextLesson->slug) }}">Next lesson</x-hyper-link>

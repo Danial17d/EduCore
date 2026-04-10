@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Gate;
 
 class StoreLessonRequest extends FormRequest
 {
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -29,8 +30,8 @@ class StoreLessonRequest extends FormRequest
             'title' => ['required', 'string','min:2'],
             'description' => ['required', 'string','max:255','min:2'],
             'duration' => ['required', 'integer','min:1' ],
-            'objectives' => ['required', 'string','min:2','max:255'],
-            'resources' => ['required', 'string','min:2','max:255'],
+            'objectives' => ['nullable', 'string','min:2','max:255'],
+            'resources' => ['nullable', 'string','min:2','max:255'],
             'attachments' => ['nullable', 'array'],
             'attachments.*' => ['nullable', 'mimes:doc,docx,pdf,txt', 'max:10240'],
             'video' => ['nullable', 'mimes:mp4' ,'max:102400'],
