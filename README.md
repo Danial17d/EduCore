@@ -32,6 +32,8 @@ composer install
 npm install
 php artisan migrate --seed
 composer run dev
+cp public/assets/default.jpg storage/app/public/default.jpg
+php artisan storage:link
 ```
 
 ## Demo Login
